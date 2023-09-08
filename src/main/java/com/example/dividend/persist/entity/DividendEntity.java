@@ -1,5 +1,6 @@
 package com.example.dividend.persist.entity;
 
+import com.example.dividend.model.Dividend;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,5 +24,13 @@ public class DividendEntity {
     private Long id;
     private Long companyId;
     private LocalDateTime date;
+
+    private String dividend;
+
+    public DividendEntity(Long companyId, Dividend dividend){
+        this.companyId = companyId;
+        this.date = dividend.getLocalDateTime();
+        this.dividend = dividend.getDividend();
+    }
 
 }
