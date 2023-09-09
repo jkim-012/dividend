@@ -38,4 +38,5 @@ public class DividendEntity {
         this.dividend = dividend.getDividend();
     }
 
+
 }
