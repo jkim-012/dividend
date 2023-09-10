@@ -1,4 +1,4 @@
-package com.example.dividend.type;
+package com.example.dividend.model.constants;
 
 public enum Month {
 

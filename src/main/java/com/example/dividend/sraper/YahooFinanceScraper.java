@@ -3,7 +3,7 @@ package com.example.dividend.sraper;
 import com.example.dividend.model.Company;
 import com.example.dividend.model.Dividend;
 import com.example.dividend.model.ScrapedResult;
-import com.example.dividend.type.Month;
+import com.example.dividend.model.constants.Month;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -71,11 +71,7 @@ public class YahooFinanceScraper implements Scraper{
 
 
                 // builder pattern 으로 dividend object 만들고 list 에 넣기
-                dividendList.add(Dividend.builder()
-                        .localDateTime(LocalDateTime.of(year, month, date, 0, 0))
-                        .dividend(dividend)
-                        .build());
-
+                dividendList.add(new Dividend(LocalDateTime.of(year, month, date, 0, 0), dividend));
             }
 
             scrapResult.setDividendEntities(dividendList);
@@ -95,10 +91,8 @@ public class YahooFinanceScraper implements Scraper{
             Element titleElement = document.getElementsByTag("h1").get(0);
             String title = titleElement.text().split(" - ")[1].trim();
 
-            return Company.builder()
-                    .ticker(ticker)
-                    .name(title)
-                    .build();
+            return new Company(ticker, title);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
