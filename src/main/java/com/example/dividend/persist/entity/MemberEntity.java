@@ -1,14 +1,11 @@
-package com.example.dividend.model;
+package com.example.dividend.persist.entity;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +26,9 @@ public class MemberEntity implements UserDetails {
 
     private String password;
 
+    @ElementCollection
+    @CollectionTable(name = "MEMBER_ROLES", joinColumns = @JoinColumn(name = "member_id"))
+    @Column(name = "role")
     private List<String> roles;
 
     @Override
@@ -36,11 +36,6 @@ public class MemberEntity implements UserDetails {
         return this.roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
     }
 
     @Override
@@ -62,4 +57,5 @@ public class MemberEntity implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
 }

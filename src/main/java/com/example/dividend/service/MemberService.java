@@ -1,7 +1,8 @@
 package com.example.dividend.service;
 
+import com.example.dividend.exception.impl.AlreadyExistUserException;
 import com.example.dividend.model.Auth;
-import com.example.dividend.model.MemberEntity;
+import com.example.dividend.persist.entity.MemberEntity;
 import com.example.dividend.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.Member;
 
 @Service
 @Slf4j
@@ -30,9 +29,9 @@ public class MemberService implements UserDetailsService {
     // 회원가입 기능
     public MemberEntity register(Auth.SignUp signUp){
         // username db 존재 여부 확인
-        Boolean exists = memberRepository.existsByUserName(signUp.getUsername());
+        boolean exists = this.memberRepository.existsByUsername(signUp.getUsername());
         if(exists){
-            throw new RuntimeException("이미 존재하는 유저입니다.");
+            throw new AlreadyExistUserException();
         }
         // pw encoding
         signUp.setPassword(this.passwordEncoder.encode(signUp.getPassword()));
@@ -43,6 +42,12 @@ public class MemberService implements UserDetailsService {
 
     //로그인 검증 기능
     public MemberEntity authenticate(Auth.SignIn signIn){
-        return null;
+        var user = this.memberRepository.findByUsername(signIn.getUsername())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
+
+        if(!this.passwordEncoder.matches(signIn.getPassword() , user.getPassword())){
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+        return user;
     }
 }
