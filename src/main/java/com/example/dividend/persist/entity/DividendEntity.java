@@ -3,11 +3,9 @@ package com.example.dividend.persist.entity;
 import com.example.dividend.model.Dividend;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity(name="DIVIDEND")

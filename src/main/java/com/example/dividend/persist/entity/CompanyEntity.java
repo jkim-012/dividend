@@ -3,7 +3,6 @@ package com.example.dividend.persist.entity;
 import com.example.dividend.model.Company;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
